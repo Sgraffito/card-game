@@ -10,6 +10,4 @@
 
 @interface PlayingCardDeck : Deck
 
-
-
 @end
