@@ -14,20 +14,17 @@
 
 @implementation Card
 
-- (int)match:(NSArray *)otherCards {
+- (int)match:(NSArray *)otherCards { // Abstract
     int score = 0;
-    
-    for (Card *card in otherCards) {
-        if ([card.contents isEqualToString:self.contents]) {
-            score = 1;
-        }
-    }
-    
     return score;
 }
 
-- (NSString *)createTitle:(NSArray *)otherCards {
+- (NSString *)createTitle:(NSArray *)otherCards { // Abstract
     return @"";
+}
+
+- (BOOL)isGameOver:(NSArray *)unmatchedCards { // Abstract
+    return false;
 }
 
 @end
