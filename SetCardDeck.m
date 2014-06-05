@@ -8,6 +8,6 @@
 
 #import "SetCardDeck.h"
 
-@implementation SetCardDeck
+@implementation SetCardDeck : Deck
 
 @end
