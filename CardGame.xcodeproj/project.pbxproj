@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		BC147A971926728F00FB6C6B /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = BC147A961926728F00FB6C6B /* CardMatchingGame.m */; };
+		BC6D82FB1940BAE80035AA67 /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = BC6D82FA1940BAE80035AA67 /* SetCard.m */; };
+		BC6D82FE1940BB120035AA67 /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = BC6D82FD1940BB120035AA67 /* SetCardDeck.m */; };
 		BCB1C5971922BEA400B61400 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB1C5961922BEA300B61400 /* Foundation.framework */; };
 		BCB1C5991922BEA400B61400 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB1C5981922BEA400B61400 /* CoreGraphics.framework */; };
 		BCB1C59B1922BEA400B61400 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB1C59A1922BEA400B61400 /* UIKit.framework */; };
@@ -41,6 +43,10 @@
 /* Begin PBXFileReference section */
 		BC147A951926728F00FB6C6B /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardMatchingGame.h; sourceTree = "<group>"; };
 		BC147A961926728F00FB6C6B /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardMatchingGame.m; sourceTree = "<group>"; };
+		BC6D82F91940BAE80035AA67 /* SetCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCard.h; sourceTree = "<group>"; };
+		BC6D82FA1940BAE80035AA67 /* SetCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCard.m; sourceTree = "<group>"; };
+		BC6D82FC1940BB120035AA67 /* SetCardDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardDeck.h; sourceTree = "<group>"; };
+		BC6D82FD1940BB120035AA67 /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardDeck.m; sourceTree = "<group>"; };
 		BCB1C5931922BEA300B61400 /* CardGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CardGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCB1C5961922BEA300B61400 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BCB1C5981922BEA400B61400 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -97,6 +103,10 @@
 		BC6D82F71940B8000035AA67 /* Set Card */ = {
 			isa = PBXGroup;
 			children = (
+				BC6D82F91940BAE80035AA67 /* SetCard.h */,
+				BC6D82FA1940BAE80035AA67 /* SetCard.m */,
+				BC6D82FC1940BB120035AA67 /* SetCardDeck.h */,
+				BC6D82FD1940BB120035AA67 /* SetCardDeck.m */,
 			);
 			name = "Set Card";
 			sourceTree = "<group>";
@@ -305,9 +315,11 @@
 				BCB1C5AD1922BEA400B61400 /* cardGameViewController.m in Sources */,
 				BCB1C5A71922BEA400B61400 /* cardGameAppDelegate.m in Sources */,
 				BC147A971926728F00FB6C6B /* CardMatchingGame.m in Sources */,
+				BC6D82FE1940BB120035AA67 /* SetCardDeck.m in Sources */,
 				BCB1C5D71922E59800B61400 /* PlayingCardDeck.m in Sources */,
 				BCB1C5A31922BEA400B61400 /* main.m in Sources */,
 				BCB1C5CD1922BF7100B61400 /* Card.m in Sources */,
+				BC6D82FB1940BAE80035AA67 /* SetCard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
