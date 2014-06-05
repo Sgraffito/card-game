@@ -2,7 +2,7 @@
 //  SetCard.h
 //  CardGame
 //
-//  Created by Nicole on 6/5/14.
+//  Created by Nicole on 6/2/14.
 //  Copyright (c) 2014 nicole. All rights reserved.
 //
 
@@ -10,4 +10,14 @@
 
 @interface SetCard : Card
 
-@end
+@property (strong, nonatomic) NSString *symbol;
+@property (nonatomic) NSUInteger number;
+@property (strong, nonatomic) UIColor *color;
+@property (strong, nonatomic) NSString *shading;
+
++ (NSArray *)validSymbols;
++ (NSUInteger)maxNumber;
++ (NSArray *)colorValues;
++ (NSArray *)shadingStrings;
+
+@end;
