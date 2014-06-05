@@ -2,11 +2,12 @@
 //  PlayingCardGameViewController.m
 //  CardGame
 //
-//  Created by Nicole on 6/5/14.
+//  Created by Nicole on 6/2/14.
 //  Copyright (c) 2014 nicole. All rights reserved.
 //
 
 #import "PlayingCardGameViewController.h"
+#import "PlayingCardDeck.h"
 
 @interface PlayingCardGameViewController ()
 
@@ -14,36 +15,37 @@
 
 @implementation PlayingCardGameViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+- (Deck *)createDeck {
+    return [[PlayingCardDeck alloc] init];
+}
+
+- (UIImage *)backgroundImageForCard:(Card *)card {
+    
+    /* If card is choosen, display card front image. If card is not choosen, choose
+     * card back image */
+    return [UIImage imageNamed:card.isChoosen ? @"cardfront" : @"cardback"];
+}
+
+- (NSAttributedString *)titleForCard:(Card *)card {
+    
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:card.contents];
+    
+    // Set text color for the title (red for hearts and diamonds and black for spades and clubs)
+    [title setAttributes:@ { NSForegroundColorAttributeName : card.color }
+                   range:NSMakeRange(0, [title length])];
+    
+    NSMutableAttributedString *noTitle = [[NSMutableAttributedString alloc] initWithString:@""];
+    
+    // If card is choosen, display the card's number and suit, otherwise display nothing
+    if (card.isChoosen) {
+        return title;
     }
-    return self;
+    return noTitle;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (int)cardMatchingCount { // Abstract
+    return 2;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

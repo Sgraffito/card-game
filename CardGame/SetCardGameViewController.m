@@ -22,7 +22,7 @@
 - (UIImage *)backgroundImageForCard:(Card *)card {
     
     // If card is choosen, background is blue. If card is not choosen, background is white
-    return [UIImage imageNamed:card.isChoosen ? @"cardBackColor" : @"cardfront"];
+    return [UIImage imageNamed:card.isChoosen ? @"cardbackcolor" : @"cardfront"];
 }
 
 - (NSAttributedString *)titleForCard:(Card *)card {
