@@ -11,12 +11,14 @@
 @interface Card : NSObject
 
 @property (strong, nonatomic) NSString *contents;
-
+@property (strong, nonatomic) UIColor *color;
+@property (strong, nonatomic) NSString *shading;
 @property (nonatomic, getter = isChoosen) BOOL chosen;
 @property (nonatomic, getter = isMatched) BOOL matched;
-@property (nonatomic, getter = isSelected) BOOL selected;
 
-- (int)match:(NSArray *)otherCards;
-- (NSString *)createTitle:(NSArray *)otherCards;
+- (int)match:(NSArray *)otherCards; // Abstract
+- (NSString *)createTitle:(NSArray *)otherCards; // Abstract
+- (BOOL)isGameOver:(NSArray *)unmatchedCards; // Abstract
 
 @end
+
