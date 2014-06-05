@@ -19,9 +19,9 @@
 
 - (int)match:(NSArray *)otherCards {
     int score = 0;
-        
+    
     if ([otherCards count] == 2) {
-
+        
         PlayingCard *firstCard = [otherCards firstObject];
         PlayingCard *secondCard = [otherCards lastObject];
         
@@ -38,7 +38,7 @@
         PlayingCard *firstCard = [otherCards objectAtIndex:0];
         PlayingCard *secondCard = [otherCards objectAtIndex:1];
         PlayingCard *thirdCard = [otherCards objectAtIndex:2];
-       
+        
         // If all three cards have the same rank
         if (firstCard.rank == thirdCard.rank && secondCard.rank == thirdCard.rank && firstCard.rank == secondCard.rank) {
             score = 15;
@@ -62,20 +62,84 @@
     }
     
     if ([otherCards count] == 3) {
-       
+        
         PlayingCard *firstCard = [otherCards objectAtIndex:0];
         PlayingCard *secondCard = [otherCards objectAtIndex:1];
         PlayingCard *thirdCard = [otherCards objectAtIndex:2];
-
+        
         title = [NSString stringWithFormat:@"%@ %@ %@", firstCard.contents, secondCard.contents, thirdCard.contents];
     }
     
     return title;
 }
 
-- (BOOL)checkIfGameOver:(NSArray *)otherCards {
-
-    return false;
+- (BOOL)isGameOver:(NSArray *)unmatchedCards {
+    
+    NSMutableDictionary *unmatchedSuit = [[NSMutableDictionary alloc] init]; // Of Card
+    NSMutableDictionary *unmatchedRank = [[NSMutableDictionary alloc] init]; // Of Card
+    
+    // Find all the cards that have not been matched
+    for (PlayingCard *card in unmatchedCards) {
+        
+        // If the suit is already in the Dictionary, increase the total count of the suit by 1
+        if ([unmatchedSuit objectForKey:card.suit]) {
+            NSString *stringCount = [unmatchedSuit objectForKey:card.suit];
+            NSInteger count = [stringCount integerValue];
+            count += 1;
+            [unmatchedSuit setObject:[NSNumber numberWithInt:count] forKey:card.suit];
+        }
+        
+        // If the suit is not in the Dictionary, add it to the Dictionary
+        else {
+            unmatchedSuit[card.suit] = [NSNumber numberWithInt:1];
+        }
+        
+        
+        // If the rank is already in the Dictionary, increase the total count of the rank by one
+        if ([unmatchedRank objectForKey:[NSNumber numberWithInt:card.rank]]) {
+            NSString *stringCount = [unmatchedRank objectForKey:[NSNumber numberWithInt:card.rank]];
+            NSInteger count = [stringCount integerValue];
+            count +=1;
+            [unmatchedRank setObject:[NSNumber numberWithInt:count] forKey:[NSNumber numberWithInt:card.rank]];
+        }
+        
+        // If the rank is not in the Dictionary, add it to the Dictionary
+        else {
+            unmatchedRank[[NSNumber numberWithInt:card.rank]] = [NSNumber numberWithInt:1];
+        }
+    }
+    
+    // Check to see if there are matching suits left
+    for (id key in unmatchedSuit) {
+        NSString *stringCount = unmatchedSuit[key];
+        NSInteger count = [stringCount integerValue];
+        
+        // If game is not over, return false
+        if (count >= 2) {
+            return false;
+        }
+    }
+    
+    // Check to see if there are matching ranks left
+    for (id key in unmatchedRank) {
+        NSString *stringCount = unmatchedRank[key];
+        NSInteger count = [stringCount integerValue];
+        
+        // If game is not over, return false
+        if (count >= 2) {
+            return false;
+        }
+        
+        /*
+         else if (self.cardMatchingCount == 3) {
+         if (count >= 3)  {
+         return true;
+         }
+         } */
+    }
+    
+    // If there are not more than two cards of the same rank or suit, end the game
+    return true;
 }
 
 - (NSString *)contents {
@@ -92,14 +156,29 @@
     return @[@"?", @"A", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"J", @"Q", @"K"];
 }
 
-//Check to make sure no one tries to set a suit to something invalid
+- (NSArray *)validColors {
+    return @[[UIColor redColor], [UIColor blackColor]];
+}
+
+- (UIColor *)color {
+    if ([self.suit isEqualToString:@"♥︎"] || [self.suit isEqualToString:@"♦︎"]) {
+        return [UIColor redColor];
+    }
+    return [UIColor blackColor];
+}
+
+- (NSString *)shading {
+    return @"solid";
+}
+
+// Check to make sure no one tries to set a suit to something invalid
 - (void)setSuit:(NSString *)suit {
     if ([[PlayingCard validSuits] containsObject:suit]) {
         _suit = suit;
     }
 }
 
-// A suit of nil returns ?
+// A suit of nil returns "?"
 - (NSString *)suit {
     return _suit ? _suit : @"?";
 }

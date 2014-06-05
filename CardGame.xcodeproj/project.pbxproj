@@ -106,6 +106,8 @@
 			children = (
 				BCB1C5D21922C59400B61400 /* PlayingCard.h */,
 				BCB1C5D31922C59400B61400 /* PlayingCard.m */,
+				BCB1C5D51922E59800B61400 /* PlayingCardDeck.h */,
+				BCB1C5D61922E59800B61400 /* PlayingCardDeck.m */,
 			);
 			name = "Playing Card";
 			sourceTree = "<group>";
@@ -195,8 +197,6 @@
 				BCB1C5CC1922BF7100B61400 /* Card.m */,
 				BCB1C5CF1922C22300B61400 /* Deck.h */,
 				BCB1C5D01922C22300B61400 /* Deck.m */,
-				BCB1C5D51922E59800B61400 /* PlayingCardDeck.h */,
-				BCB1C5D61922E59800B61400 /* PlayingCardDeck.m */,
 			);
 			name = Model;
 			path = ..;
