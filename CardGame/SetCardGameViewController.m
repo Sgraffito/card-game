@@ -2,11 +2,12 @@
 //  SetCardGameViewController.m
 //  CardGame
 //
-//  Created by Nicole on 6/5/14.
+//  Created by Nicole on 6/2/14.
 //  Copyright (c) 2014 nicole. All rights reserved.
 //
 
 #import "SetCardGameViewController.h"
+#import "SetCardDeck.h"
 
 @interface SetCardGameViewController ()
 
@@ -14,36 +15,60 @@
 
 @implementation SetCardGameViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+- (Deck *)createDeck {
+    return [[SetCardDeck alloc] init];
+}
+
+- (UIImage *)backgroundImageForCard:(Card *)card {
+    
+    // If card is choosen, background is blue. If card is not choosen, background is white
+    return [UIImage imageNamed:card.isChoosen ? @"cardBackColor" : @"cardfront"];
+}
+
+- (NSAttributedString *)titleForCard:(Card *)card {
+    
+    // Initialize a title
+    NSMutableAttributedString *title =
+    [[NSMutableAttributedString alloc] initWithString:card.contents];
+    
+    // Create title if the shape is outlined (shape is outline with no fill)
+    if ([card.shading isEqualToString:@"outline"]) {
+        [title setAttributes:@ { NSStrokeWidthAttributeName : @8,
+            NSStrokeColorAttributeName : card.color }
+                       range:NSMakeRange(0, [title length])];
     }
-    return self;
+    
+    // Create title if the shape is solid (ouline and fill are same color and transparency)
+    else if([card.shading isEqualToString:@"solid"]) {
+        [title setAttributes:@ { NSStrokeWidthAttributeName : @-8,
+            NSStrokeColorAttributeName : card.color,
+            NSForegroundColorAttributeName : card.color }
+                       range:NSMakeRange(0, [title length])];
+    }
+    
+    // Create title if shape is open (outlined shape with transparent fill)
+    else if([card.shading isEqualToString:@"open"]) {
+        UIColor *solidColor = card.color;
+        UIColor *transparentColor = [solidColor colorWithAlphaComponent:0.2];
+        [title setAttributes:@ { NSStrokeWidthAttributeName : @-8,
+            NSStrokeColorAttributeName : solidColor,
+            NSForegroundColorAttributeName : transparentColor}
+                       range:NSMakeRange(0, [title length])];
+        
+    }
+    
+    // Always display the card's contents
+    return title;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+- (UIColor *)colorOfCard:(Card *)card {
+    
+    // Get the color of the card
+    return card.color;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (int)cardMatchingCount {
+    return 3;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
