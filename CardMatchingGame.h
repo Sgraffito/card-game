@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Deck.h"
 #import "Card.h"
-#import "PlayingCard.h"
 
 @interface CardMatchingGame : NSObject
 
@@ -24,5 +23,6 @@
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic) NSUInteger cardMatchingCount;
 @property (nonatomic, strong) NSString *matchingAnnoucement;
+@property (nonatomic, strong) NSMutableArray *cards; // Of Card
 
 @end
