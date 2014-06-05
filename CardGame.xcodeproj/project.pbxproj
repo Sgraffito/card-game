@@ -94,6 +94,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC6D82F71940B8000035AA67 /* Set Card */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Set Card";
+			sourceTree = "<group>";
+		};
+		BC6D82F81940B8050035AA67 /* Playing Card */ = {
+			isa = PBXGroup;
+			children = (
+				BCB1C5D21922C59400B61400 /* PlayingCard.h */,
+				BCB1C5D31922C59400B61400 /* PlayingCard.m */,
+			);
+			name = "Playing Card";
+			sourceTree = "<group>";
+		};
 		BCB1C58A1922BEA300B61400 = {
 			isa = PBXGroup;
 			children = (
@@ -171,14 +187,14 @@
 		BCB1C5CE1922BF8B00B61400 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BC6D82F81940B8050035AA67 /* Playing Card */,
+				BC6D82F71940B8000035AA67 /* Set Card */,
 				BC147A951926728F00FB6C6B /* CardMatchingGame.h */,
 				BC147A961926728F00FB6C6B /* CardMatchingGame.m */,
 				BCB1C5CB1922BF7100B61400 /* Card.h */,
 				BCB1C5CC1922BF7100B61400 /* Card.m */,
 				BCB1C5CF1922C22300B61400 /* Deck.h */,
 				BCB1C5D01922C22300B61400 /* Deck.m */,
-				BCB1C5D21922C59400B61400 /* PlayingCard.h */,
-				BCB1C5D31922C59400B61400 /* PlayingCard.m */,
 				BCB1C5D51922E59800B61400 /* PlayingCardDeck.h */,
 				BCB1C5D61922E59800B61400 /* PlayingCardDeck.m */,
 			);
