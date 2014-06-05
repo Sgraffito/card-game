@@ -23,7 +23,7 @@
     
     /* If card is choosen, display card front image. If card is not choosen, choose
      * card back image */
-    return [UIImage imageNamed:card.isChoosen ? @"cardfront" : @"cardback"];
+    return [UIImage imageNamed:card.isChoosen ? @"cardfront" : @"cardbackbeetle"];
 }
 
 - (NSAttributedString *)titleForCard:(Card *)card {
