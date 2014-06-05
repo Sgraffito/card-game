@@ -10,7 +10,6 @@
 
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
-@property (nonatomic, strong) NSMutableArray *cards; // Of Card
 @property (nonatomic, strong) NSMutableArray *setOfCards; // Of Card
 @end
 
@@ -31,7 +30,7 @@
 - (instancetype)initWithCardCount:(NSUInteger)count
                         usingDeck:(Deck *)deck {
     self = [super init]; //Super's designated initializer
-   
+    
     if (self) {
         for (int i = 0; i < count; i += 1) {
             Card *card = [deck drawRandomCard];
@@ -75,7 +74,7 @@ static const int COST_TO_CHOOSE = 1;
             // Add it to an array of card to match
             [self.setOfCards addObject:card];
             
-            // If 2 or 3 cards have been picked by the user (depeding the the game settings)
+            // If 2 or 3 cards have been picked by the user (depending on the the game settings)
             if ([self.setOfCards count] == self.cardMatchingCount) {
                 
                 // Get the score
@@ -93,7 +92,9 @@ static const int COST_TO_CHOOSE = 1;
                     // Mark the card as matched
                     for (Card *matchedCard in self.setOfCards) {
                         for (Card *setOfCard in self.cards) {
-                            if ([matchedCard.contents isEqualToString:setOfCard.contents]) {
+                            if ([matchedCard.contents isEqualToString:setOfCard.contents]
+                                && [matchedCard.shading isEqualToString:setOfCard.shading]
+                                && [matchedCard.color isEqual:setOfCard.color]) {
                                 setOfCard.matched = YES;
                             }
                         }
@@ -105,30 +106,34 @@ static const int COST_TO_CHOOSE = 1;
                 
                 // If no match has occured...
                 else {
-
+                    
                     // Calculate the score
                     self.score -= MISMATCH_PENALTY;
                     
                     // Create a title
-                    self.matchingAnnoucement = [NSString stringWithFormat:@"%@ do not match. Penalty of %d points", [card createTitle:self.setOfCards], MISMATCH_PENALTY];
+                    self.matchingAnnoucement = [NSString stringWithFormat:@"%@ do not match. -%d points", [card createTitle:self.setOfCards], MISMATCH_PENALTY];
                     
                     // Turn the cards back over
                     for (Card *matchedCard in self.setOfCards) {
                         for (Card *setOfCards in self.cards) {
-                            if ([matchedCard.contents isEqualToString:setOfCards.contents]) {
+                            if ([matchedCard.contents isEqualToString:setOfCards.contents]
+                                && [matchedCard.shading isEqualToString:setOfCards.shading]
+                                && [matchedCard.color isEqual:setOfCards.color]) {
                                 setOfCards.matched = NO;
                                 setOfCards.chosen = NO;
                             }
                         }
                     }
-                
+                    
                     // Remove all objects from the card to match array
                     [self.setOfCards removeAllObjects];
                     
                     /* Keep the contents of the last card choosen by the user visible and
                      * add the card to the cards to match array */
                     for (Card *setOfCards in self.cards) {
-                        if ([setOfCards.contents isEqualToString:card.contents]) {
+                        if ([setOfCards.contents isEqualToString:card.contents]
+                            && [setOfCards.shading isEqualToString:card.shading]
+                            && [setOfCards.color isEqual:card.color]) {
                             setOfCards.chosen = YES;
                             [self.setOfCards addObject:setOfCards];
                         }
@@ -143,78 +148,14 @@ static const int COST_TO_CHOOSE = 1;
 }
 
 - (BOOL)endOfGame:(NSArray *)unmatchedCards {
+    Card *card = [unmatchedCards objectAtIndex:0];
     
-    NSMutableDictionary *unmatchedSuit = [[NSMutableDictionary alloc] init]; // Of Card
-    NSMutableDictionary *unmatchedRank = [[NSMutableDictionary alloc] init]; // Of Card
-
-    // Find all the cards that have not been matched
-    for (PlayingCard *card in unmatchedCards) {
-        
-        // If the suit is already in the Dictionary, increase the total count of the suit by 1
-        if ([unmatchedSuit objectForKey:card.suit]) {
-            NSString *stringCount = [unmatchedSuit objectForKey:card.suit];
-            NSInteger count = [stringCount integerValue];
-            count += 1;
-            [unmatchedSuit setObject:[NSNumber numberWithInt:count] forKey:card.suit];
-        }
-        
-        // If the suit is not in the Dictionary, add it to the Dictionary
-        else {
-            unmatchedSuit[card.suit] = [NSNumber numberWithInt:1];
-        }
-        
-        
-        // If the rank is already in the Dictionary, increase the total count of the rank by one
-        if ([unmatchedRank objectForKey:[NSNumber numberWithInt:card.rank]]) {
-            NSString *stringCount = [unmatchedRank objectForKey:[NSNumber numberWithInt:card.rank]];
-            NSInteger count = [stringCount integerValue];
-            count +=1;
-            [unmatchedRank setObject:[NSNumber numberWithInt:count] forKey:[NSNumber numberWithInt:card.rank]];
-        }
-        
-        // If the rank is not in the Dictionary, add it to the Dictionary
-        else {
-            unmatchedRank[[NSNumber numberWithInt:card.rank]] = [NSNumber numberWithInt:1];
-        }
-    }
-
-    // Check to see if there are matching suits left
-    for (id key in unmatchedSuit) {
-        NSString *stringCount = unmatchedSuit[key];
-        NSInteger count = [stringCount integerValue];
-        
-        if (self.cardMatchingCount == 2) {
-            if (count >= 2) {
-                return true;
-            }
-        }
-        
-        else if (self.cardMatchingCount == 3) {
-            if (count >= 3) {
-                return true;
-            }
-        }
+    // If the game is over, return true
+    if ([card isGameOver:unmatchedCards]) {
+        return true;
     }
     
-    // Check to see if there are matching ranks left
-    for (id key in unmatchedRank) {
-        NSString *stringCount = unmatchedRank[key];
-        NSInteger count = [stringCount integerValue];
-        
-        if (self.cardMatchingCount == 2) {
-            if (count >= 2) {
-                return true;
-            }
-        }
-        
-        else if (self.cardMatchingCount == 3) {
-            if (count >= 3)  {
-                return true;
-            }
-        }
-    }
-    
-    // If there are not more than two cards of the same rank or suit, end the game
+    // If the game is not over, return false
     return false;
 }
 
