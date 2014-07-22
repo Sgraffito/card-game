@@ -53,21 +53,20 @@
     return score;
 }
 
-- (NSString *)createTitle:(NSArray *)otherCards {
+- (NSAttributedString *)createTitle:(NSArray *)otherCards {
     
-    NSString *title = @"";
-    
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@""];
+    NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+    // Check to make sure there are two cards in the array
     if ([otherCards count] == 2) {
-        title = [NSString stringWithFormat:@"%@ %@", [otherCards.firstObject contents], [otherCards.lastObject contents]];
-    }
-    
-    if ([otherCards count] == 3) {
         
-        PlayingCard *firstCard = [otherCards objectAtIndex:0];
-        PlayingCard *secondCard = [otherCards objectAtIndex:1];
-        PlayingCard *thirdCard = [otherCards objectAtIndex:2];
-        
-        title = [NSString stringWithFormat:@"%@ %@ %@", firstCard.contents, secondCard.contents, thirdCard.contents];
+        for (Card *card in otherCards) {
+            NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:card.contents];
+            [substring setAttributes:@ { NSForegroundColorAttributeName : card.color }
+                               range:NSMakeRange(0, [substring length])];
+            [title appendAttributedString:substring];
+            [title appendAttributedString:space];
+        }
     }
     
     return title;
@@ -86,7 +85,7 @@
             NSString *stringCount = [unmatchedSuit objectForKey:card.suit];
             NSInteger count = [stringCount integerValue];
             count += 1;
-            [unmatchedSuit setObject:[NSNumber numberWithInt:count] forKey:card.suit];
+            [unmatchedSuit setObject:[NSNumber numberWithInt:(int)count] forKey:card.suit];
         }
         
         // If the suit is not in the Dictionary, add it to the Dictionary
@@ -94,13 +93,12 @@
             unmatchedSuit[card.suit] = [NSNumber numberWithInt:1];
         }
         
-        
         // If the rank is already in the Dictionary, increase the total count of the rank by one
-        if ([unmatchedRank objectForKey:[NSNumber numberWithInt:card.rank]]) {
-            NSString *stringCount = [unmatchedRank objectForKey:[NSNumber numberWithInt:card.rank]];
+        if ([unmatchedRank objectForKey:[NSNumber numberWithInt:(int)card.rank]]) {
+            NSString *stringCount = [unmatchedRank objectForKey:[NSNumber numberWithInt:(int)card.rank]];
             NSInteger count = [stringCount integerValue];
             count +=1;
-            [unmatchedRank setObject:[NSNumber numberWithInt:count] forKey:[NSNumber numberWithInt:card.rank]];
+            [unmatchedRank setObject:[NSNumber numberWithInt:(int)count] forKey:[NSNumber numberWithInt:(int)card.rank]];
         }
         
         // If the rank is not in the Dictionary, add it to the Dictionary

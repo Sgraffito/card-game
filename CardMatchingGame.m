@@ -76,7 +76,7 @@ static const int COST_TO_CHOOSE = 1;
             
             // If 2 or 3 cards have been picked by the user (depending on the the game settings)
             if ([self.setOfCards count] == self.cardMatchingCount) {
-                
+                                
                 // Get the score
                 int matchScore = [card match:self.setOfCards];
                 
@@ -87,7 +87,15 @@ static const int COST_TO_CHOOSE = 1;
                     self.score += matchScore * MATCH_BONUS;
                     
                     // Create a title
-                    self.matchingAnnoucement = [NSString stringWithFormat:@"Matched %@ for %d points", [card createTitle:self.setOfCards], (matchScore * MATCH_BONUS)];
+                    self.matchingAnnoucement = [[NSMutableAttributedString alloc] initWithString:@""];
+                    NSString *string1 = [NSString stringWithFormat:@"Matched "];
+                    NSAttributedString *cardChoice = [[NSAttributedString alloc] initWithAttributedString:[card createTitle:self.setOfCards]];
+                    NSString *string2 = [NSString stringWithFormat:@"for %d points", (matchScore * MATCH_BONUS)];
+                    NSAttributedString *substring1 = [[NSAttributedString alloc] initWithString:string1];
+                    NSAttributedString *substring2 = [[NSAttributedString alloc] initWithString:string2];
+                    [self.matchingAnnoucement appendAttributedString:substring1];
+                    [self.matchingAnnoucement appendAttributedString:cardChoice];
+                    [self.matchingAnnoucement appendAttributedString:substring2];
                     
                     // Mark the card as matched
                     for (Card *matchedCard in self.setOfCards) {
@@ -111,7 +119,15 @@ static const int COST_TO_CHOOSE = 1;
                     self.score -= MISMATCH_PENALTY;
                     
                     // Create a title
-                    self.matchingAnnoucement = [NSString stringWithFormat:@"%@ do not match. -%d points", [card createTitle:self.setOfCards], MISMATCH_PENALTY];
+                    self.matchingAnnoucement = [[NSMutableAttributedString alloc] initWithString:@""];
+                    NSAttributedString *cardChoice = [[NSAttributedString alloc] initWithAttributedString:[card createTitle:self.setOfCards]];
+                    NSString *string1 = [NSString stringWithFormat:@"do not match. Loose %d points", MISMATCH_PENALTY];
+                    NSAttributedString *substring1 = [[NSAttributedString alloc] initWithString:string1];
+                    [self.matchingAnnoucement appendAttributedString:cardChoice];
+                    [self.matchingAnnoucement appendAttributedString:substring1];
+
+                    // Old title
+                    //self.matchingAnnoucement = [NSString stringWithFormat:@"%@ do not match. Loose %d points", [card createTitle:self.setOfCards], MISMATCH_PENALTY];
                     
                     // Turn the cards back over
                     for (Card *matchedCard in self.setOfCards) {

@@ -22,7 +22,7 @@
 // Readonly means there is no setter (only a getter)
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic) NSUInteger cardMatchingCount;
-@property (nonatomic, strong) NSString *matchingAnnoucement;
+@property (nonatomic, strong) NSMutableAttributedString *matchingAnnoucement;
 @property (nonatomic, strong) NSMutableArray *cards; // Of Card
 
 @end

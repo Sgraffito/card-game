@@ -8,6 +8,7 @@
 
 #import "cardGameViewController.h"
 #import "CardMatchingGame.h"
+#import "HistoryViewController.h"
 
 @interface cardGameViewController ()
 @property (strong, nonatomic) CardMatchingGame *game;
@@ -18,9 +19,19 @@
 @property (nonatomic) NSUInteger redeal;
 @property (weak, nonatomic) IBOutlet UILabel *cardChoice;
 @property (weak, nonatomic) IBOutlet UILabel *numberOfCardsToMatchLabel;
+@property (strong, nonatomic) NSMutableArray *pastCardHands; // Of Strings
 @end
 
 @implementation cardGameViewController
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"Get History"]){
+        if ([segue.destinationViewController isKindOfClass:[HistoryViewController class]]) {
+            HistoryViewController *history = (HistoryViewController *)segue.destinationViewController;
+            history.finishedGames = self.pastCardHands;
+        }
+    }
+}
 
 - (void)viewDidLoad {
     [self updateUI];
@@ -32,6 +43,11 @@
 - (NSMutableArray *)selectedCards {
     if (!_selectedCards) _selectedCards = [[NSMutableArray alloc] init];
     return _selectedCards;
+}
+
+- (NSMutableArray *)pastCardHands {
+    if (!_pastCardHands) _pastCardHands = [[NSMutableArray alloc] init];
+    return _pastCardHands;
 }
 
 - (CardMatchingGame *)game {
@@ -47,21 +63,21 @@
 
 // User clicks on a card
 - (IBAction)touchCardButton:(UIButton *)sender {
-    int choosenButtonIndex = [self.cardButtons indexOfObject:sender];
+    int choosenButtonIndex = (int)[self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:choosenButtonIndex];
     [self updateUI];
 }
 
 - (void)updateUI {
     
-    //Get the number of cards to be matched
+    // Get the number of cards to be matched
     [self.game setCardMatchingCount:[self cardMatchingCount]];
     
     // Set the format for each card
     for (UIButton *cardButton in self.cardButtons) {
         
         // Get the contents of the card clicked on by the user
-        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        int cardButtonIndex = (int)[self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
         
         // Set the title of the card
@@ -75,10 +91,23 @@
     }
     
     // Label that shows the score of the game
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
     
     // Label that shows the cards selected and if they match or not
-    self.cardChoice.text = self.game.matchingAnnoucement;
+    [self.cardChoice setAttributedText:self.game.matchingAnnoucement];
+
+    // Add label's text to array of past card game hands
+    NSString *pCH = [self.game.matchingAnnoucement string]; // Convert from NSAttributedString to NSString
+    
+    // If there is a message, and there are no other previous messages added to the array, add the message to the array
+    if (pCH && [self.pastCardHands count] == 0) {
+        [self.pastCardHands addObject:pCH];
+    }
+    
+    // If there is a message, and it has not aready been added to the array, add the message to the array
+    else if (pCH && (![pCH isEqualToString:[self.pastCardHands lastObject]])) {
+        [self.pastCardHands addObject:pCH];
+    }
     
     // While game is being played, grey out the UISegmentControl
     if (self.redeal == 0) {
@@ -102,7 +131,7 @@
         }
         
         // Change score text to final
-        self.scoreLabel.text = [NSString stringWithFormat:@"Final score: %d", self.game.score];
+        self.scoreLabel.text = [NSString stringWithFormat:@"Final score: %d", (int)self.game.score];
     }
     
     // Reset redeal to 0
@@ -125,6 +154,7 @@
     _game = [[CardMatchingGame alloc]
              initWithCardCount:[self.cardButtons count]
              usingDeck:[self createDeck]];
+    _pastCardHands = [[NSMutableArray alloc] init];
     [self updateUI];
 }
 
@@ -174,13 +204,18 @@
     // Find all unmatched buttons and add them to an array
     for (UIButton *cardButton in self.cardButtons) {
         
-        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        int cardButtonIndex = (int)[self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
         
         // Add all unmatched buttons to an array
         if (!card.isMatched) {
             [cardsNotMatched addObject:card];
         }
+    }
+    
+    // If there are no cards left to be matched, return true
+    if ([cardsNotMatched count] == 0) {
+        return true;
     }
     
     // If the game has ended, return true

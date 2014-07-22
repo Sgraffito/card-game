@@ -15,6 +15,41 @@
 @synthesize color = _color;
 @synthesize shading = _shading;
 
+- (BOOL)isGameOver:(NSArray *)unmatchedCards {
+    
+    // Test print
+    /*
+    for (int i = 0; i < [unmatchedCards count]; i += 1){
+        Card *unmatched = [unmatchedCards objectAtIndex:i];
+        NSLog(@"%d unmatchedCard: %@", i, unmatched.contents);
+    }
+     */
+    
+    for(int i = 0; i < [unmatchedCards count] - 2; i += 1) {
+        for (int j = i + 1; j < [unmatchedCards count] - 1; j += 1) {
+            for (int k = j + 1; k < [unmatchedCards count]; k += 1) {
+                
+                SetCard *firstCard = [unmatchedCards objectAtIndex:i];
+                SetCard *secondCard = [unmatchedCards objectAtIndex:j];
+                SetCard *thirdCard = [unmatchedCards objectAtIndex:k];
+                
+                // Check the three cards for a match
+                NSArray *checkCardsForMatch = @[firstCard, secondCard, thirdCard];
+                int score = [self match:checkCardsForMatch];
+                
+                // If three cards are a match, the game is not over, return false
+                if (score) {
+                    //NSLog(@"Matched %@, %@, %@", firstCard.contents, secondCard.contents, thirdCard.contents);
+                    return false;
+                }
+            }
+        }
+    }
+    
+    // There are no matches, return false
+    return true;
+}
+
 - (int)match:(NSArray *)otherCards {
     
     // If no cards are matched score is zero
@@ -84,32 +119,58 @@
                 score += 3;
             }
         
-        // IF the numbers are not all the same or all different, there is no match, exit
+        // If the numbers are not all the same or all different, there is no match, exit
         else {
             return 0;
         }
     }
     
+    // The three cards match, return the score
     return score;
 }
 
-- (NSString *)createTitle:(NSArray *)otherCards {
+- (NSAttributedString *)createTitle:(NSArray *)otherCards {
     
-    NSString *title = @"";
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@""];
     
-    if ([otherCards count] == 2) {
-        title = [NSString stringWithFormat:@"%@ %@", [otherCards.firstObject contents], [otherCards.lastObject contents]];
-    }
-    
+    // Check to make sure thee cards are being matched
     if ([otherCards count] == 3) {
         
-        SetCard *firstCard = [otherCards objectAtIndex:0];
-        SetCard *secondCard = [otherCards objectAtIndex:1];
-        SetCard *thirdCard = [otherCards objectAtIndex:2];
-        
-        title = [NSString stringWithFormat:@"%@ %@ %@", firstCard.contents, secondCard.contents, thirdCard.contents];
+        for (Card *card in otherCards) {
+            
+            NSMutableAttributedString *substring = [[NSMutableAttributedString alloc] initWithString:card.contents];
+            NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+            
+            // Create title if the shape is outlined (shape is outline with no fill)
+            if ([card.shading isEqualToString:@"outline"]) {
+                [substring setAttributes:@ { NSStrokeWidthAttributeName : @8,
+                    NSStrokeColorAttributeName : card.color }
+                               range:NSMakeRange(0, [substring length])];
+            }
+            
+            // Create title if the shape is solid (ouline and fill are same color and transparency)
+            else if([card.shading isEqualToString:@"solid"]) {
+                [substring setAttributes:@ { NSStrokeWidthAttributeName : @-8,
+                    NSStrokeColorAttributeName : card.color,
+                    NSForegroundColorAttributeName : card.color }
+                               range:NSMakeRange(0, [substring length])];
+            }
+            
+            // Create title if shape is open (outlined shape with transparent fill)
+            else if([card.shading isEqualToString:@"open"]) {
+                UIColor *solidColor = card.color;
+                UIColor *transparentColor = [solidColor colorWithAlphaComponent:0.2];
+                [substring setAttributes:@ { NSStrokeWidthAttributeName : @-8,
+                    NSStrokeColorAttributeName : solidColor,
+                    NSForegroundColorAttributeName : transparentColor}
+                               range:NSMakeRange(0, [substring length])];
+                
+            }
+            
+            [title appendAttributedString:substring];
+            [title appendAttributedString:space];
+        }
     }
-    
     return title;
 }
 
@@ -188,5 +249,6 @@
         _shading = shading;
     }
 }
+
 
 @end

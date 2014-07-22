@@ -17,7 +17,7 @@
 @property (nonatomic, getter = isMatched) BOOL matched;
 
 - (int)match:(NSArray *)otherCards; // Abstract
-- (NSString *)createTitle:(NSArray *)otherCards; // Abstract
+- (NSAttributedString *)createTitle:(NSArray *)otherCards; // Abstract
 - (BOOL)isGameOver:(NSArray *)unmatchedCards; // Abstract
 
 @end
